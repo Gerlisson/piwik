@@ -289,26 +289,4 @@ class LogDataPurger
         }
         return $result;
     }
-
-    /**
-     * Utility function. Creates a new instance of LogDataPurger with the supplied array
-     * of settings.
-     *
-     * $settings must contain values for the following keys:
-     * - 'delete_logs_older_than': The number of days after which log entries are considered
-     *                             old.
-     * - 'delete_logs_max_rows_per_query': Max number of rows to DELETE in one query.
-     *
-     * @param array $settings Array of settings
-     * @param bool $useRealTable
-     * @return \Piwik\Plugins\PrivacyManager\LogDataPurger
-     */
-    public static function make($settings, $useRealTable = false)
-    {
-        return new LogDataPurger(
-            $settings['delete_logs_older_than'],
-            $settings['delete_logs_max_rows_per_query'],
-            new DimensionMetadataProvider()
-        );
-    }
 }

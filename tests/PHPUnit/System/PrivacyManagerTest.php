@@ -18,6 +18,7 @@ use Piwik\Db;
 use Piwik\Option;
 use Piwik\Plugins\Goals\API as APIGoals;
 use Piwik\Plugins\Goals\Archiver;
+use Piwik\Plugins\PrivacyManager\DimensionMetadataProvider;
 use Piwik\Plugins\PrivacyManager\LogDataPurger;
 use Piwik\Plugins\PrivacyManager\PrivacyManager;
 use Piwik\Plugins\PrivacyManager\ReportsPurger;
@@ -489,7 +490,11 @@ class PrivacyManagerTest extends SystemTestCase
     {
         \Piwik\Piwik::addAction("LogDataPurger.ActionsToKeepInserted.olderThan", array($this, 'addReferenceToUnusedAction'));
 
-        $purger = LogDataPurger::make($this->settings, true);
+        $purger = new LogDataPurger(
+            $this->settings['delete_logs_older_than'],
+            $this->settings['delete_logs_max_rows_per_query'],
+            new DimensionMetadataProvider()
+        );
 
         $this->unusedIdAction = Db::fetchOne(
             "SELECT idaction FROM " . Common::prefixTable('log_action') . " WHERE name = ?",
